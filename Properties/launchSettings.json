@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "AuthEventsWebAPI": {
+    "AuthEventsAzureFunction": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7178",
+      "commandLineArgs": "--port 7134",
       "launchBrowser": false
     }
   }
