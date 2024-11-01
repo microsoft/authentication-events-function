@@ -9,19 +9,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
-namespace Company.Function
+namespace Company.AuthEvents.OnOtpSend.CustomEmailSendGrid
 {
-    public class CustomEmail
+    public class CustomEmailSendGrid
     {
-        private readonly ILogger<CustomEmail> _logger;
+        private readonly ILogger<CustomEmailSendGrid> _logger;
 
-        public CustomEmail(ILogger<CustomEmail> logger)
+        public CustomEmailSendGrid(ILogger<CustomEmailSendGrid> logger)
         {
             _logger = logger;
         }
 
-        [Function(nameof(CustomEmail))]
-        public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
+        [Function("OnOtpSend_CustomEmailSendGrid")]
+        public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Function, "post")] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -37,30 +37,48 @@ namespace Company.Function
             await SendEmailAsync(emailTo, otp);
 
             // Prepare response
-            ResponseData responseData = ResponseData.GenerateResponse("microsoft.graph.OtpSend.continueWithDefaultBehavior");
+            ResponseObject responseData = new ResponseObject("microsoft.graph.OnOtpSendResponseData");
+            responseData.Data.Actions = new List<ResponseAction>() { new ResponseAction(
+                "microsoft.graph.OtpSend.continueWithDefaultBehavior") };
+
             return new OkObjectResult(responseData);
         }
 
         private async Task SendEmailAsync(string emailTo, string code)
         {
             // Get app settings
-            var connectionString = Environment.GetEnvironmentVariable("mail_connectionString");
+            var apiKey = Environment.GetEnvironmentVariable("mail_sendgridKey");
             var sender = Environment.GetEnvironmentVariable("mail_sender");
-            var subject = Environment.GetEnvironmentVariable("mail_subject");
-
-            var emailClient = new EmailClient(connectionString);
-            var body = EmailTemplate.GenerateBody(code);
+            var senderName = Environment.GetEnvironmentVariable("mail_senderName");
+            var template = Environment.GetEnvironmentVariable("mail_template");
 
             _logger.LogInformation($"Sending OTP to {emailTo}");
 
             try
             {
-                EmailSendOperation emailSendOperation = await emailClient.SendAsync(
-                Azure.WaitUntil.Started,
-                sender,
-                emailTo,
-                subject,
-                body);
+                if (!string.IsNullOrEmpty(apiKey))
+                {
+                    var client = new HttpClient();
+                    var request = new HttpRequestMessage(HttpMethod.Post, "https://api.sendgrid.com/v3/mail/send");
+                    request.Headers.Add("Authorization", $"Bearer {apiKey}");
+
+                    SendGridMessage msg = new SendGridMessage()
+                    {
+                        template_id = template,
+                        from = new Person { email = sender, name = senderName },
+                        personalizations = new List<Personalization> {
+
+                new Personalization(emailTo, code)
+                }
+                    };
+
+                    request.Content = new StringContent(msg.ToString(), null, "application/json");
+
+                    var response = await client.SendAsync(request);
+                    _logger.LogInformation($"Sendgrid response: {response.StatusCode}");
+                    response.EnsureSuccessStatusCode();
+                    _logger.LogInformation(await response.Content.ReadAsStringAsync());
+                }
             }
             catch (System.Exception ex)
             {
@@ -68,86 +86,40 @@ namespace Company.Function
             }
         }
     }
-    public class ResponseData
+
+    public class ResponseObject
     {
         [JsonPropertyName("data")]
         public Data Data { get; set; }
 
-        public static ResponseData GenerateResponse(string actionodatattype, string responseodatattype = "microsoft.graph.OnOtpSendResponseData")
+        public ResponseObject(string dataType)
         {
-            return new ResponseData()
-            {
-                Data = new Data(responseodatattype)
-                {
-                    actions = new List<Action>()
-                        {
-                            new Action(actionodatattype)
-                        }
-                }
-            };
+            Data = new Data(dataType);
         }
     }
 
     public class Data
     {
         [JsonPropertyName("@odata.type")]
-        public string odatatype { get; set; }
-        public List<Action> actions { get; set; }
+        public string DataType { get; set; }
+        [JsonPropertyName("actions")]
+        public List<ResponseAction> Actions { get; set; }
 
-        public Data(string responseodatattype)
+        public Data(string dataType)
         {
-            odatatype = responseodatattype;
+            DataType = dataType;
         }
     }
 
-    public class Action
+    public class ResponseAction
     {
         [JsonPropertyName("@odata.type")]
-        public string odatatype { get; set; }
+        public string DataType { get; set; }
 
-        public Action(string newodatattype, string mesg = null)
+        public ResponseAction(string dataType)
         {
-            odatatype = newodatattype;
+            DataType = dataType;
         }
-    }
-
-    public class SendGridMessage
-    {
-        public List<Personalization> personalizations { get; set; }
-        public string template_id { get; set; }
-        public Person from { get; set; }
-    }
-
-    public class Personalization
-    {
-        public Personalization(string to, string otp)
-        {
-            this.to = new List<Person>() { new Person() { email = to } };
-            this.dynamic_template_data = new DynamicTemplateData() { otp = otp };
-        }
-
-        public List<Person> to { get; set; }
-        public DynamicTemplateData dynamic_template_data { get; set; }
-    }
-
-    public class DynamicTemplateData
-    {
-        public string otp { get; set; }
-    }
-
-    public class Person
-    {
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string email { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string name { get; set; }
-    }
-
-    public class OTPCodeTemplateData
-    {
-        [JsonPropertyName("otp")]
-        public string OTPCode { get; set; }
     }
 
     public class EmailTemplate
@@ -196,6 +168,51 @@ namespace Company.Function
             </div>
             </body></html>";
         }
+    }
+
+    /********* SendGrid data ********/
+    public class SendGridMessage
+    {
+        public List<Personalization> personalizations { get; set; }
+        public string template_id { get; set; }
+        public Person from { get; set; }
+
+        public override string ToString()
+        {
+            return JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
+        }
+    }
+
+    public class Personalization
+    {
+        public Personalization(string to, string otp)
+        {
+            this.to = new List<Person>() { new Person() { email = to } };
+            this.dynamic_template_data = new DynamicTemplateData() { otp = otp };
+        }
+
+        public List<Person> to { get; set; }
+        public DynamicTemplateData dynamic_template_data { get; set; }
+    }
+
+    public class DynamicTemplateData
+    {
+        public string otp { get; set; }
+    }
+
+    public class Person
+    {
+        public string email { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string name { get; set; }
+    }
+
+    public class OTPCodeTemplateData
+    {
+        [JsonPropertyName("otp")]
+        public string OTPCode { get; set; }
+
     }
 }
 
