@@ -1,0 +1,45 @@
+{
+    "type": "microsoft.graph.authenticationEvent.tokenIssuanceStart",
+    "source": "/tenants/11111111-0000-0000-0000-000000000000/applications/44444444-0000-0000-0000-000000000000",
+    "data": {
+        "@odata.type": "microsoft.graph.onTokenIssuanceStartCalloutData",
+        "tenantId": "11111111-0000-0000-0000-000000000000",
+        "authenticationEventListenerId": "22222222-0000-0000-0000-000000000000",
+        "customAuthenticationExtensionId": "33333333-0000-0000-0000-000000000000",
+        "authenticationContext": {
+            "correlationId": "12345678-0000-0000-0000-000000000000",
+            "client": {
+                "ip": "127.0.0.1",
+                "locale": "en-us",
+                "market": "en-us"
+            },
+            "protocol": "OAUTH2.0",
+            "clientServicePrincipal": {
+                "id": "33333333-0000-0000-0000-000000000000",
+                "appId": "44444444-0000-0000-0000-000000000000",
+                "appDisplayName": "My Test application",
+                "displayName": "My Test application"
+            },
+            "resourceServicePrincipal": {
+                "id": "33333333-0000-0000-0000-000000000000",
+                "appId": "44444444-0000-0000-0000-000000000000",
+                "appDisplayName": "My Test application",
+                "displayName": "My Test application"
+            },
+            "user": {
+                "companyName": "Casey Jensen",
+                "createdDateTime": "2016-03-01T15:23:40Z",
+                "displayName": "Casey Jensen",
+                "givenName": "Casey",
+                "id": "55555555-0000-0000-0000-000000000000",
+                "mail": "casey@contoso.com",
+                "onPremisesSamAccountName": "caseyjensen",
+                "onPremisesUserPrincipalName": "Casey Jensen",
+                "preferredLanguage": "en-us",
+                "surname": "Jensen",
+                "userPrincipalName": "casey@contoso.com",
+                "userType": "Member"
+            }
+        }
+    }
+}

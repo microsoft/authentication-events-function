@@ -1,0 +1,67 @@
+{
+    "type": "microsoft.graph.authenticationEvent.attributeCollectionStart",
+    "source": "/tenants/11111111-0000-0000-0000-000000000000/applications/44444444-0000-0000-0000-000000000000",
+    "data": {
+        "@odata.type": "microsoft.graph.onAttributeCollectionStartCalloutData",
+        "tenantId": "11111111-0000-0000-0000-000000000000",
+        "authenticationEventListenerId": "22222222-0000-0000-0000-000000000000",
+        "customAuthenticationExtensionId": "33333333-0000-0000-0000-000000000000",
+        "authenticationContext": {
+            "correlationId": "12345678-0000-0000-0000-000000000000",
+            "client": {
+                "ip": "127.0.0.1",
+                "locale": "en-us",
+                "market": "en-us"
+            },
+            "protocol": "OAUTH2.0",
+            "clientServicePrincipal": {
+                "id": "33333333-0000-0000-0000-000000000000",
+                "appId": "44444444-0000-0000-0000-000000000000",
+                "appDisplayName": "My Test application",
+                "displayName": "My Test application"
+            },
+            "resourceServicePrincipal": {
+                "id": "33333333-0000-0000-0000-000000000000",
+                "appId": "44444444-0000-0000-0000-000000000000",
+                "appDisplayName": "My Test application",
+                "displayName": "My Test application"
+            }
+        },
+        "userSignUpInfo": {
+            "attributes": {
+                "givenName": {
+                    "@odata.type": "microsoft.graph.stringDirectoryAttributeValue",
+                    "value": "Larissa Price",
+                    "attributeType": "builtIn"
+                },
+                "companyName": {
+                    "@odata.type": "microsoft.graph.stringDirectoryAttributeValue",
+                    "value": "Contoso University",
+                    "attributeType": "builtIn"
+                },
+                "extension_6666666666666666666666666666666_universityGroups": {
+                    "@odata.Type": "microsoft.graph.stringDirectoryAttributeValue",
+                    "value": "Alumni,Faculty",
+                    "attributeType": "directorySchemaExtension"
+                },
+                "extension_6666666666666666666666666666666_graduationYear": {
+                    "@odata.type": "microsoft.graph.int64DirectoryAttributeValue",
+                    "value": 2010,
+                    "attributeType": "directorySchemaExtension"
+                },
+                "extension_6666666666666666666666666666666_onMailingList": {
+                    "@odata.type": "microsoft.graph.booleanDirectoryAttributeValue",
+                    "value": false,
+                    "attributeType": "directorySchemaExtension"
+                }
+            },
+            "identities": [
+                {
+                    "signInType": "email",
+                    "issuer": "contoso.onmicrosoft.com",
+                    "issuerAssignedId": "larissa.price@contoso.onmicrosoft.com"
+                }
+            ]
+        }
+    }
+}
