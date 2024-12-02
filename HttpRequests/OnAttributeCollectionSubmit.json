@@ -1,9 +1,9 @@
 {
     "type": "microsoft.graph.authenticationEvent.attributeCollectionSubmit",
-    "source": "/tenants/11111111-0000-0000-0000-000000000000/applications/44444444-0000-0000-0000-000000000000",
+    "source": "/tenants/aaaabbbb-0000-cccc-1111-dddd2222eeee/applications/00001111-aaaa-2222-bbbb-3333cccc4444",
     "data": {
         "@odata.type": "microsoft.graph.onAttributeCollectionSubmitCalloutData",
-        "tenantId": "11111111-0000-0000-0000-000000000000",
+        "tenantId": "aaaabbbb-0000-cccc-1111-dddd2222eeee",
         "authenticationEventListenerId": "22222222-0000-0000-0000-000000000000",
         "customAuthenticationExtensionId": "33333333-0000-0000-0000-000000000000",
         "authenticationContext": {
@@ -16,13 +16,13 @@
             "protocol": "OAUTH2.0",
             "clientServicePrincipal": {
                 "id": "33333333-0000-0000-0000-000000000000",
-                "appId": "44444444-0000-0000-0000-000000000000",
+                "appId": "00001111-aaaa-2222-bbbb-3333cccc4444",
                 "appDisplayName": "My Test application",
                 "displayName": "My Test application"
             },
             "resourceServicePrincipal": {
                 "id": "33333333-0000-0000-0000-000000000000",
-                "appId": "44444444-0000-0000-0000-000000000000",
+                "appId": "00001111-aaaa-2222-bbbb-3333cccc4444",
                 "appDisplayName": "My Test application",
                 "displayName": "My Test application"
             }
