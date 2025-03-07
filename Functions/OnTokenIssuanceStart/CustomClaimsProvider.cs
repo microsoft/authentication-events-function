@@ -31,7 +31,7 @@ namespace Company.Function
             string correlationId = jsonPayload["data"]!["authenticationContext"]!["correlationId"]!.ToString();
 
             // Placeholder to retrive information from interanl systems
-            // For example, you can call a database or an API to get the user's roles
+            // For example, using the user's UPN, you can call a database or an API to get the user's roles
             string dateOfBirth = "01/01/2000";
             List<string> customRoles = new List<string>() { "Writer", "Editor" };
 
