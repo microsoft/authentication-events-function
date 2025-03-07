@@ -26,16 +26,19 @@ namespace Company.Function
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             JsonNode jsonPayload = JsonNode.Parse(requestBody)!;
 
-            // Read the correlation ID from the Microsoft Entra request
+            // Read the user principal name (UPN) and the correlation ID from the Microsoft Entra request
+            string upn = jsonPayload["data"]!["authenticationContext"]!["user"]!["userPrincipalName"]!.ToString();
             string correlationId = jsonPayload["data"]!["authenticationContext"]!["correlationId"]!.ToString();
 
-
+            // Placeholder to retrive information from interanl systems
+            // For example, you can call a database or an API to get the user's roles
+    
             // Prepare response
             ResponseObject responseData = new ResponseObject("microsoft.graph.onTokenIssuanceStartResponseData");
 
             Claims claims = new Claims();
             claims.CorrelationId = correlationId;
-            claims.ApiVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            claims.ApiVersion = Assembly.GetExecutingAssembly().GetName().Version!.ToString();
             claims.DateOfBirth = "01/01/2000";
             claims.CustomRoles = ["Writer", "Editor"];
 
