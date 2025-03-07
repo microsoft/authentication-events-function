@@ -32,15 +32,16 @@ namespace Company.Function
 
             // Placeholder to retrive information from interanl systems
             // For example, you can call a database or an API to get the user's roles
+            string dateOfBirth = "01/01/2000";
+            List<string> customRoles = new List<string>() { "Writer", "Editor" };
     
             // Prepare response
             ResponseObject responseData = new ResponseObject("microsoft.graph.onTokenIssuanceStartResponseData");
-
             Claims claims = new Claims();
             claims.CorrelationId = correlationId;
             claims.ApiVersion = Assembly.GetExecutingAssembly().GetName().Version!.ToString();
-            claims.DateOfBirth = "01/01/2000";
-            claims.CustomRoles = ["Writer", "Editor"];
+            claims.DateOfBirth = dateOfBirth;
+            claims.CustomRoles = customRoles;
 
             responseData.Data.Actions = new List<ResponseAction>() { new ResponseAction(
                 "microsoft.graph.tokenIssuanceStart.provideClaimsForToken",
