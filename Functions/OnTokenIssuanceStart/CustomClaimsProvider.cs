@@ -34,15 +34,20 @@ namespace Company.Function
             // For example, you can call a database or an API to get the user's roles
             string dateOfBirth = "01/01/2000";
             List<string> customRoles = new List<string>() { "Writer", "Editor" };
-    
-            // Prepare response
+
+            // Prepare a response object
             ResponseObject responseData = new ResponseObject("microsoft.graph.onTokenIssuanceStartResponseData");
             Claims claims = new Claims();
-            claims.CorrelationId = correlationId;
-            claims.ApiVersion = Assembly.GetExecutingAssembly().GetName().Version!.ToString();
+
+            // Return the user attributes from the internal system
             claims.DateOfBirth = dateOfBirth;
             claims.CustomRoles = customRoles;
 
+            // Return the correlation ID and the API version for debugging purposes
+            claims.CorrelationId = correlationId;
+            claims.ApiVersion = Assembly.GetExecutingAssembly().GetName().Version!.ToString();
+
+            // Define the "action type" and the "claims" to be returned to Microsoft Entra
             responseData.Data.Actions = new List<ResponseAction>() { new ResponseAction(
                 "microsoft.graph.tokenIssuanceStart.provideClaimsForToken",
                 claims) };
