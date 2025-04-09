@@ -1,14 +1,11 @@
 # Microsoft Entra ID Custom authentication extension sample
 
 
-Within Microsoft Entra ID and Microsoft Entra External ID's sign-up and sign-in user flow, there are built-in authentication events. You can also add [custom authentication extensions](https://learn.microsoft.com/entra/identity-platform/custom-extension-overview) at specific points within the authentication flow. A custom authentication extension is essentially an event listener that, when activated, makes an HTTP call to a REST API endpoint where you define a workflow action. For example, you could use a custom claims provider to add external user data to the token before the token is issued.
+Within Microsoft Entra ID and Microsoft Entra External ID's sign-up and sign-in user flow, there are built-in authentication events. You can also add [custom authentication extensions](https://learn.microsoft.com/entra/identity-platform/custom-extension-overview) at specific points within the authentication flow. 
 
+A custom authentication extension is essentially an event listener that, when activated, makes an HTTP call to a REST API endpoint where you define a workflow action. For example, you could use a custom claims provider to add external user data to the token before the token is issued.
 
-This Azure Function (WebJob) sample code demonstrates how to create a web API for Entra ID custom authentication extension. 
-
-> [!NOTE]
->
-> The [Microsoft.Azure.WebJobs.Extensions.AuthenticationEvents](https://www.nuget.org/packages/Microsoft.Azure.WebJobs.Extensions.AuthenticationEvents) NuGet library is currently in preview. Steps in this article are subject to change. For general availability implementation of implementing a token issuance start event, you can do so using the [Azure portal](https://learn.microsoft.com/entra/identity-platform/custom-extension-tokenissuancestart-setup?tabs=visual-studio-code%2Cazure-portal&pivots=azure-portal).
+This Azure Function (WebJob) sample code demonstrates how to create a web API for Entra ID custom authentication extension.
 
 ## Prerequisites
 
